@@ -20,6 +20,8 @@ class Auth
     {
         self::start();
         session_regenerate_id(true);
+        // Eén rol tegelijk: een eventuele medewerkersessie vervalt bij klant-login.
+        unset($_SESSION['medewerker_id'], $_SESSION['medewerker_naam'], $_SESSION['medewerker_rol']);
         $_SESSION['klant_id'] = $klantId;
         $_SESSION['klant_naam'] = $naam;
     }
@@ -28,6 +30,8 @@ class Auth
     {
         self::start();
         session_regenerate_id(true);
+        // Eén rol tegelijk: een eventuele klantsessie vervalt bij medewerker-login.
+        unset($_SESSION['klant_id'], $_SESSION['klant_naam']);
         $_SESSION['medewerker_id'] = $medewerkerId;
         $_SESSION['medewerker_naam'] = $naam;
         $_SESSION['medewerker_rol'] = $rol;

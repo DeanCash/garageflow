@@ -89,7 +89,7 @@ class BeheerController
         $this->afspraken->wijzigStatus($afspraakId, 'in_uitvoering');
 
         zetMelding('succes', 'Werkorder aangemaakt.');
-        redirect('beheer/planning?datum=' . urlencode((string) ($_POST['datum'] ?? date('Y-m-d'))));
+        redirect('beheer/planning&datum=' . urlencode((string) ($_POST['datum'] ?? date('Y-m-d'))));
     }
 
     public function toonWerkorder(): void
