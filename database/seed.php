@@ -38,9 +38,9 @@ $db->prepare(
      (:vn2, :an2, :em2, :pw2, "monteur"),
      (:vn3, :an3, :em3, :pw3, "monteur")'
 )->execute([
-    'vn1' => 'Sandra', 'an1' => 'de Wit', 'em1' => 'balie@garageverhoeven.nl',
-    'vn2' => 'Jeroen', 'an2' => 'Bakker', 'em2' => 'jeroen@garageverhoeven.nl',
-    'vn3' => 'Tim',    'an3' => 'Visser', 'em3' => 'tim@garageverhoeven.nl',
+    'vn1' => 'Sandra', 'an1' => 'de Wit', 'em1' => 'balie@garagesandvos.nl',
+    'vn2' => 'Jeroen', 'an2' => 'Bakker', 'em2' => 'jeroen@garagesandvos.nl',
+    'vn3' => 'Tim',    'an3' => 'Visser', 'em3' => 'tim@garagesandvos.nl',
     'pw1' => $wachtwoordMedewerker,
     'pw2' => $wachtwoordMedewerker,
     'pw3' => $wachtwoordMedewerker,
@@ -102,5 +102,5 @@ $db->prepare(
 ]);
 
 echo "Klaar.\n";
-echo "Medewerker: balie@garageverhoeven.nl / garage123\n";
+echo "Medewerker: balie@garagesandvos.nl / garage123\n";
 echo "Klant:      dean@example.com / klant1234\n";

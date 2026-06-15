@@ -1,5 +1,5 @@
 <div class="hero">
-    <h1>Welkom bij Garage Verhoeven</h1>
+    <h1>Welkom bij Garage Sandvos</h1>
     <p>
         Plan online je onderhoud of reparatie in bij onze BMW-specialist. Maak een
         account aan, voeg je voertuig toe en kies een moment dat jou uitkomt.

@@ -8,6 +8,6 @@ class HomeController
 {
     public function index(): void
     {
-        View::render('home', [], 'Garage Verhoeven - GarageFlow');
+        View::render('home', [], 'Garage Sandvos - GarageFlow');
     }
 }

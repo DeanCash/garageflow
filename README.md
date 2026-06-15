@@ -1,6 +1,6 @@
 # GarageFlow
 
-Webgebaseerd afspraken- en werkordersysteem voor **Garage Verhoeven**, een
+Webgebaseerd afspraken- en werkordersysteem voor **Garage Sandvos**, een
 onafhankelijke BMW-specialist. Klanten plannen online onderhoud of reparatie in;
 de werkplaats beheert de dagplanning en handelt de werkorders af.
 
@@ -51,8 +51,8 @@ systeem bestaat uit twee subsystemen: het **klantportaal** en het
 
 | Rol | E-mailadres | Wachtwoord |
 |-----|-------------|------------|
-| Serviceadviseur | balie@garageverhoeven.nl | garage123 |
-| Monteur | jeroen@garageverhoeven.nl | garage123 |
+| Serviceadviseur | balie@garagesandvos.nl | garage123 |
+| Monteur | jeroen@garagesandvos.nl | garage123 |
 | Klant | dean@example.com | klant1234 |
 
 ## Tests

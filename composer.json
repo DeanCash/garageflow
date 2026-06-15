@@ -1,6 +1,6 @@
 {
-    "name": "garageverhoeven/garageflow",
-    "description": "GarageFlow - afspraken- en werkordersysteem voor Garage Verhoeven",
+    "name": "garagesandvos/garageflow",
+    "description": "GarageFlow - afspraken- en werkordersysteem voor Garage Sandvos",
     "type": "project",
     "require": {
         "php": ">=8.1"

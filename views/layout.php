@@ -16,7 +16,7 @@ $meldingen = haalMeldingen();
 </head>
 <body>
 <header class="topbalk">
-    <a class="logo" href="<?= url('home') ?>">Garage Verhoeven<span>BMW-specialist</span></a>
+    <a class="logo" href="<?= url('home') ?>">Garage Sandvos<span>BMW-specialist</span></a>
     <nav>
         <?php if (Auth::isKlant()): ?>
             <a href="<?= url('klant/dashboard') ?>">Mijn overzicht</a>
@@ -41,7 +41,7 @@ $meldingen = haalMeldingen();
 </main>
 
 <footer class="voetbalk">
-    <p>GarageFlow &middot; afspraken- en werkordersysteem &middot; Garage Verhoeven, Breda</p>
+    <p>GarageFlow &middot; afspraken- en werkordersysteem &middot; Garage Sandvos, Breda</p>
 </footer>
 </body>
 </html>
