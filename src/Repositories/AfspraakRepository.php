@@ -131,6 +131,23 @@ class AfspraakRepository
         return $afspraak ?: null;
     }
 
+    /**
+     * Controleert of een afspraak toebehoort aan een specifieke klant (via het
+     * voertuig). Wordt gebruikt om te voorkomen dat een klant de afspraak van een
+     * ander kan wijzigen of annuleren.
+     */
+    public function behoortToeAanKlant(int $afspraakId, int $klantId): bool
+    {
+        $stmt = $this->db->prepare(
+            'SELECT COUNT(*) FROM afspraak a
+             JOIN voertuig v ON v.id = a.voertuig_id
+             WHERE a.id = :id AND v.klant_id = :klant'
+        );
+        $stmt->execute(['id' => $afspraakId, 'klant' => $klantId]);
+
+        return (int) $stmt->fetchColumn() > 0;
+    }
+
     public function wijzigStatus(int $id, string $status): void
     {
         $stmt = $this->db->prepare('UPDATE afspraak SET status = :status WHERE id = :id');

@@ -203,8 +203,15 @@ class KlantController
         }
 
         $datum = (string) ($_POST['datum'] ?? '');
-        if ($datum !== '' && $datum < date('Y-m-d')) {
+        if ($datum !== '' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $datum) !== 1) {
+            $validatie->voegFoutToe('datum', 'Kies een geldige datum.');
+        } elseif ($datum !== '' && $datum < date('Y-m-d')) {
             $validatie->voegFoutToe('datum', 'De datum kan niet in het verleden liggen.');
+        }
+
+        $starttijd = (string) ($_POST['starttijd'] ?? '');
+        if ($starttijd !== '' && preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $starttijd) !== 1) {
+            $validatie->voegFoutToe('starttijd', 'Kies een geldige starttijd.');
         }
 
         if ($dienst !== null && $validatie->isGeldig()) {
@@ -245,10 +252,19 @@ class KlantController
 
     public function annuleerAfspraak(): void
     {
-        $this->vereisKlant();
+        $klantId = $this->vereisKlant();
         $this->controleerCsrf();
 
-        $this->afspraken->wijzigStatus((int) ($_POST['afspraak_id'] ?? 0), 'geannuleerd');
+        $afspraakId = (int) ($_POST['afspraak_id'] ?? 0);
+
+        // Voorkom dat een klant via een vervalst formulier de afspraak van iemand
+        // anders annuleert: de afspraak moet aan de ingelogde klant toebehoren.
+        if (!$this->afspraken->behoortToeAanKlant($afspraakId, $klantId)) {
+            zetMelding('fout', 'Die afspraak kon niet worden gevonden.');
+            redirect('klant/dashboard');
+        }
+
+        $this->afspraken->wijzigStatus($afspraakId, 'geannuleerd');
         zetMelding('succes', 'Afspraak geannuleerd.');
         redirect('klant/dashboard');
     }
@@ -257,7 +273,7 @@ class KlantController
     {
         $klantId = Auth::klantId();
         if ($klantId === null) {
-            zetMelding('fout', 'Log eerst in om verder te gaan.');
+            zetMelding('info', 'Log eerst in om verder te gaan.');
             redirect('klant/inloggen');
         }
 

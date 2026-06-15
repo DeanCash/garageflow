@@ -56,6 +56,16 @@ class AfspraakRepositoryTest extends TestCase
         $this->assertFalse($repo->heeftOverlap(2, '2026-06-20', '09:30:00', '10:30:00'));
     }
 
+    public function test_afspraak_behoort_alleen_toe_aan_eigen_klant(): void
+    {
+        $repo = new AfspraakRepository($this->db);
+        $id = $repo->voegToe(1, 1, 1, '2026-06-20', '09:00:00', '10:00:00', null);
+
+        // Klant 1 bezit voertuig 1 -> de afspraak is van klant 1, niet van een ander.
+        $this->assertTrue($repo->behoortToeAanKlant($id, 1));
+        $this->assertFalse($repo->behoortToeAanKlant($id, 999));
+    }
+
     private function maakVerbinding(): ?PDO
     {
         $host = getenv('GF_TEST_DB_HOST') ?: '127.0.0.1';
