@@ -7,6 +7,7 @@
 /** @var float $btw */
 /** @var float $totaal */
 $euro = fn (float $bedrag): string => '&euro; ' . number_format($bedrag, 2, ',', '.');
+$terug = ['route' => 'beheer/planning', 'label' => 'Terug naar planning'];
 ?>
 <h1>Werkorder #<?= e((string) $werkorder['id']) ?></h1>
 

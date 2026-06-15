@@ -3,6 +3,7 @@
 /** @var array<string,mixed> $oud */
 $fouten = $fouten ?? [];
 $oud = $oud ?? [];
+$terug = ['route' => 'home', 'label' => 'Terug naar home'];
 ?>
 <div class="kaart" style="max-width: 420px;">
     <h1>Inloggen</h1>

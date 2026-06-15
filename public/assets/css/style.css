@@ -150,3 +150,12 @@ th { background: var(--blauw-licht); color: var(--antraciet); }
 }
 
 .hint { color: #6b7480; font-size: 13px; }
+
+.teruglink {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: #5a6470;
+    text-decoration: none;
+    font-size: 14px;
+}
+.teruglink:hover { color: #1a3a5c; text-decoration: underline; }

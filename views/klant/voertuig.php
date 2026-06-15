@@ -3,6 +3,7 @@
 /** @var array<string,mixed> $oud */
 $fouten = $fouten ?? [];
 $oud = $oud ?? [];
+$terug = ['route' => 'klant/dashboard', 'label' => 'Terug naar overzicht'];
 ?>
 <div class="kaart" style="max-width: 480px;">
     <h1>Voertuig toevoegen</h1>

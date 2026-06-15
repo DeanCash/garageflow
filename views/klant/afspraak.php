@@ -6,6 +6,7 @@
 /** @var array<string,mixed> $oud */
 $fouten = $fouten ?? [];
 $oud = $oud ?? [];
+$terug = ['route' => 'klant/dashboard', 'label' => 'Terug naar overzicht'];
 ?>
 <div class="kaart" style="max-width: 560px;">
     <h1>Afspraak maken</h1>

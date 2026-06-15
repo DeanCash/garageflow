@@ -33,6 +33,10 @@ $meldingen = haalMeldingen();
 </header>
 
 <main class="inhoud">
+    <?php if (!empty($terug)): ?>
+        <a class="teruglink" href="<?= url($terug['route']) ?>">&larr; <?= e($terug['label']) ?></a>
+    <?php endif; ?>
+
     <?php foreach ($meldingen as $type => $tekst): ?>
         <div class="melding melding-<?= e($type) ?>"><?= e($tekst) ?></div>
     <?php endforeach; ?>
