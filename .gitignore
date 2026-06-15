@@ -1,0 +1,9 @@
+/vendor/
+/config/config.php
+.phpunit.result.cache
+*.log
+.DS_Store
+Thumbs.db
+
+# PHPUnit 10 cache
+.phpunit.cache/
