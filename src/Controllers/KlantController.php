@@ -81,6 +81,11 @@ class KlantController
 
     public function toonInloggen(): void
     {
+        // Al ingelogd als klant? Dan direct door naar het overzicht.
+        if (Auth::isKlant()) {
+            redirect('klant/dashboard');
+        }
+
         View::render('klant/inloggen', ['oud' => []], 'Inloggen');
     }
 

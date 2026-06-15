@@ -14,5 +14,5 @@
 <div class="kaart">
     <h2>Voor medewerkers</h2>
     <p>Serviceadviseurs en monteurs beheren de dagplanning en de werkorders.</p>
-    <a class="knop knop-secundair" href="<?= url('beheer/inloggen') ?>">Naar werkplaatsbeheer</a>
+    <a class="knop knop-secundair" href="<?= url('beheer/planning') ?>">Naar werkplaatsbeheer</a>
 </div>

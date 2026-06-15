@@ -30,6 +30,12 @@ class BeheerController
 
     public function toonInloggen(): void
     {
+        // Al ingelogd als medewerker? Dan direct door naar de planning in plaats
+        // van opnieuw het inlogformulier tonen.
+        if (Auth::isMedewerker()) {
+            redirect('beheer/planning');
+        }
+
         View::render('beheer/inloggen', ['oud' => []], 'Beheer - inloggen');
     }
 
@@ -129,10 +135,13 @@ class BeheerController
         $status = (string) ($_POST['status'] ?? 'open');
         $this->werkorders->wijzigStatus($werkorderId, $status);
 
-        // Houd de status van de afspraak gelijk met die van de werkorder.
+        // Houd de status van de afspraak in beide richtingen gelijk met die van de
+        // werkorder: 'gereed' -> 'gereed', elke andere status -> 'in_uitvoering'.
+        // Zo blijft de dagplanning consistent met de werkorderpagina.
         $werkorder = $this->werkorders->vindOpId($werkorderId);
-        if ($werkorder !== null && $status === 'gereed') {
-            $this->afspraken->wijzigStatus((int) $werkorder['afspraak_id'], 'gereed');
+        if ($werkorder !== null) {
+            $afspraakStatus = $status === 'gereed' ? 'gereed' : 'in_uitvoering';
+            $this->afspraken->wijzigStatus((int) $werkorder['afspraak_id'], $afspraakStatus);
         }
 
         zetMelding('succes', 'Status bijgewerkt.');
