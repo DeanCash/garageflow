@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: PHPUnit (PHP 8.2 + MySQL)
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+          MYSQL_DATABASE: garageflow_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15
+
+    env:
+      GF_TEST_DB_HOST: 127.0.0.1
+      GF_TEST_DB_NAAM: garageflow_test
+      GF_TEST_DB_USER: root
+      GF_TEST_DB_PASS: ""
+
+    steps:
+      - name: Code uitchecken
+        uses: actions/checkout@v4
+
+      - name: PHP instellen
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: pdo, pdo_mysql
+          coverage: none
+
+      - name: Composer-afhankelijkheden installeren
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Tests draaien (unit + integratie)
+        run: vendor/bin/phpunit --colors=never
