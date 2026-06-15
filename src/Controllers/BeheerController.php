@@ -184,7 +184,7 @@ class BeheerController
     private function vereisMedewerker(): void
     {
         if (!Auth::isMedewerker()) {
-            zetMelding('fout', 'Log in als medewerker om het beheer te gebruiken.');
+            zetMelding('info', 'Log in als medewerker om het beheer te gebruiken.');
             redirect('beheer/inloggen');
         }
     }

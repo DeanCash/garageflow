@@ -7,7 +7,13 @@
 /** @var float $btw */
 /** @var float $totaal */
 $euro = fn (float $bedrag): string => '&euro; ' . number_format($bedrag, 2, ',', '.');
-$terug = ['route' => 'beheer/planning', 'label' => 'Terug naar planning'];
+// Terug naar de planning van de dag waar de werkorder bij hoort, zodat je op
+// dezelfde dag terugkomt als waar je vandaan kwam.
+$terugRoute = 'beheer/planning';
+if (!empty($afspraak['datum'])) {
+    $terugRoute .= '&datum=' . urlencode((string) $afspraak['datum']);
+}
+$terug = ['route' => $terugRoute, 'label' => 'Terug naar planning'];
 ?>
 <h1>Werkorder #<?= e((string) $werkorder['id']) ?></h1>
 
@@ -106,4 +112,4 @@ $terug = ['route' => 'beheer/planning', 'label' => 'Terug naar planning'];
     </form>
 </div>
 
-<a class="knop knop-secundair" href="<?= url('beheer/planning') ?>">Terug naar planning</a>
+<a class="knop knop-secundair" href="<?= url($terug['route']) ?>">Terug naar planning</a>

@@ -111,6 +111,7 @@ input, select, textarea {
 
 .melding-succes { background: #e4f3ea; color: var(--groen); border: 1px solid #b6dcc6; }
 .melding-fout { background: #fbe7e6; color: var(--rood); border: 1px solid #e6b6b3; }
+.melding-info { background: #e8f0f8; color: var(--blauw); border: 1px solid #b9d2ea; }
 
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rand); font-size: 14px; }
