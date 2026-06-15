@@ -136,7 +136,7 @@ class BeheerController
         }
 
         zetMelding('succes', 'Status bijgewerkt.');
-        redirect('beheer/werkorder?id=' . $werkorderId);
+        redirect('beheer/werkorder&id=' . $werkorderId);
     }
 
     public function wijsMonteurToe(): void
@@ -148,7 +148,7 @@ class BeheerController
         $this->werkorders->wijsMonteurToe($werkorderId, (int) ($_POST['monteur_id'] ?? 0));
 
         zetMelding('succes', 'Monteur toegewezen.');
-        redirect('beheer/werkorder?id=' . $werkorderId);
+        redirect('beheer/werkorder&id=' . $werkorderId);
     }
 
     public function voegRegelToe(): void
@@ -164,12 +164,12 @@ class BeheerController
 
         if ($omschrijving === '' || $aantal <= 0) {
             zetMelding('fout', 'Vul een omschrijving en een positief aantal in.');
-            redirect('beheer/werkorder?id=' . $werkorderId);
+            redirect('beheer/werkorder&id=' . $werkorderId);
         }
 
         $this->werkorders->voegRegelToe($werkorderId, $soort, $omschrijving, $aantal, $prijs);
         zetMelding('succes', 'Regel toegevoegd.');
-        redirect('beheer/werkorder?id=' . $werkorderId);
+        redirect('beheer/werkorder&id=' . $werkorderId);
     }
 
     private function vereisMedewerker(): void
