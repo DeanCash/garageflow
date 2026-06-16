@@ -1,5 +1,35 @@
 <?php
 
+/*
+ * ===========================================================================
+ *  TESTS DRAAIEN  (lees dit als je gevraagd wordt de tests te runnen)
+ * ===========================================================================
+ *  Voer uit vanuit de projectmap (de map met composer.json en phpunit.xml).
+ *
+ *    > ALLE tests (unit + integratie):
+ *          vendor/bin/phpunit
+ *      of via Composer:
+ *          composer test
+ *
+ *    > ALLEEN de unit-tests (geen database nodig):
+ *          vendor/bin/phpunit --testsuite Unit
+ *
+ *    > ALLEEN de integratietests (vereist database 'garageflow_test'):
+ *          vendor/bin/phpunit --testsuite Integratie
+ *
+ *    > Alleen deze testklasse:
+ *          vendor/bin/phpunit --filter AfspraakRepositoryTest
+ *
+ *  LET OP: dit is een INTEGRATIETEST en heeft een MySQL-database nodig.
+ *  Start XAMPP MySQL en maak eenmalig de lege database 'garageflow_test' aan:
+ *        mysql -u root -e "CREATE DATABASE IF NOT EXISTS garageflow_test"
+ *  Standaardverbinding: host 127.0.0.1, gebruiker root, leeg wachtwoord. Aanpassen
+ *  kan via de omgevingsvariabelen GF_TEST_DB_HOST / _NAAM / _USER / _PASS.
+ *  Is er geen testdatabase beschikbaar, dan slaat deze test zichzelf netjes over
+ *  (markTestSkipped) zodat de unit-tests altijd blijven werken.
+ * ===========================================================================
+ */
+
 namespace GarageFlow\Tests\Integratie;
 
 use GarageFlow\Repositories\AfspraakRepository;

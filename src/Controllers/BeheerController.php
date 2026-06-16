@@ -92,7 +92,10 @@ class BeheerController
 
         $afspraakId = (int) ($_POST['afspraak_id'] ?? 0);
         $this->werkorders->maakVoorAfspraak($afspraakId);
-        $this->afspraken->wijzigStatus($afspraakId, 'in_uitvoering');
+        // Een nieuwe werkorder start als 'open' (werk nog niet begonnen). Houd de
+        // afspraakstatus daarmee in lijn via dezelfde mapping, zodat de planning en
+        // de werkorderpagina vanaf het begin hetzelfde tonen.
+        $this->afspraken->wijzigStatus($afspraakId, $this->afspraakStatusBij('open'));
 
         zetMelding('succes', 'Werkorder aangemaakt.');
         redirect('beheer/planning&datum=' . urlencode((string) ($_POST['datum'] ?? date('Y-m-d'))));
@@ -135,13 +138,16 @@ class BeheerController
         $status = (string) ($_POST['status'] ?? 'open');
         $this->werkorders->wijzigStatus($werkorderId, $status);
 
-        // Houd de status van de afspraak in beide richtingen gelijk met die van de
-        // werkorder: 'gereed' -> 'gereed', elke andere status -> 'in_uitvoering'.
-        // Zo blijft de dagplanning consistent met de werkorderpagina.
+        // Houd de afspraakstatus gelijk met de werkorderstatus via één vaste
+        // mapping (zie afspraakStatusBij), zodat de dagplanning (toont de
+        // afspraakstatus) en de werkorderpagina (toont de werkorderstatus) altijd
+        // hetzelfde laten zien.
         $werkorder = $this->werkorders->vindOpId($werkorderId);
         if ($werkorder !== null) {
-            $afspraakStatus = $status === 'gereed' ? 'gereed' : 'in_uitvoering';
-            $this->afspraken->wijzigStatus((int) $werkorder['afspraak_id'], $afspraakStatus);
+            $this->afspraken->wijzigStatus(
+                (int) $werkorder['afspraak_id'],
+                $this->afspraakStatusBij($status)
+            );
         }
 
         zetMelding('succes', 'Status bijgewerkt.');
@@ -179,6 +185,23 @@ class BeheerController
         $this->werkorders->voegRegelToe($werkorderId, $soort, $omschrijving, $aantal, $prijs);
         zetMelding('succes', 'Regel toegevoegd.');
         redirect('beheer/werkorder&id=' . $werkorderId);
+    }
+
+    /**
+     * Eén bron van waarheid voor het koppelen van een werkorderstatus aan de
+     * bijbehorende afspraakstatus. De afspraak (zichtbaar op de planning) volgt
+     * zo altijd de werkorder (zichtbaar op de werkorderpagina):
+     *   open          -> ingepland     (werkorder bestaat, werk nog niet gestart)
+     *   in_uitvoering -> in_uitvoering
+     *   gereed        -> gereed
+     */
+    private function afspraakStatusBij(string $werkorderStatus): string
+    {
+        return match ($werkorderStatus) {
+            'gereed'        => 'gereed',
+            'in_uitvoering' => 'in_uitvoering',
+            default         => 'ingepland',
+        };
     }
 
     private function vereisMedewerker(): void

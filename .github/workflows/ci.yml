@@ -1,48 +1,72 @@
-name: CI
+# ============================================================================
+#  CONTINUOUS INTEGRATION (CI) — GitHub Actions
+# ----------------------------------------------------------------------------
+#  Wat dit doet: bij elke wijziging draait GitHub automatisch al onze tests op
+#  een verse Linux-machine met PHP en MySQL. Slaagt alles, dan krijgt de commit
+#  of pull request een groen vinkje; faalt er iets, dan een rood kruis.
+#  Dit is het bewijs voor "Manage & Control": een navolgbare, geautomatiseerde
+#  werkwijze waarbij niets ongetest op main belandt.
+# ============================================================================
 
+name: CI                       # Naam zoals die in het tabblad "Actions" verschijnt.
+
+# --- WANNEER draait deze workflow? -----------------------------------------
 on:
   push:
-    branches: [main]
-  pull_request:
+    branches: [main]           # Bij elke push naar de main-branch.
+  pull_request:                # En bij elke pull request (ongeacht de branch).
 
+# --- WAT wordt er gedraaid? -------------------------------------------------
 jobs:
-  test:
-    name: PHPUnit (PHP 8.2 + MySQL)
-    runs-on: ubuntu-latest
+  test:                                  # We hebben één job, genaamd "test".
+    name: PHPUnit (PHP 8.2 + MySQL)      # Leesbare naam van de job in de UI.
+    runs-on: ubuntu-latest               # Draait op een schone Ubuntu-machine van GitHub.
 
+    # --- Hulpdienst: een tijdelijke MySQL-database naast de job --------------
+    # GitHub start een MySQL-container die alleen tijdens deze job leeft, zodat
+    # onze integratietests tegen een echte database kunnen draaien.
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:8.0                       # Officiële MySQL 8.0 Docker-image.
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-          MYSQL_DATABASE: garageflow_test
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"    # Root mag zonder wachtwoord (alleen in deze wegwerp-DB).
+          MYSQL_DATABASE: garageflow_test      # Maak meteen de lege testdatabase aan.
         ports:
-          - 3306:3306
+          - 3306:3306                          # Stel de MySQL-poort beschikbaar aan de job.
+        # Health-check: wacht tot MySQL écht klaar is om verbindingen aan te
+        # nemen voordat de tests starten (anders falen ze door een te vroege start).
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=15
 
+    # --- Omgevingsvariabelen voor de tests ----------------------------------
+    # Deze namen sluiten exact aan op wat AfspraakRepositoryTest uitleest
+    # (getenv('GF_TEST_DB_*')), zodat de integratietest de juiste DB vindt.
     env:
       GF_TEST_DB_HOST: 127.0.0.1
       GF_TEST_DB_NAAM: garageflow_test
       GF_TEST_DB_USER: root
       GF_TEST_DB_PASS: ""
 
+    # --- De stappen, in volgorde --------------------------------------------
     steps:
       - name: Code uitchecken
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4            # Haalt onze repository binnen op de runner.
 
       - name: PHP instellen
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v2      # Installeert PHP op de runner.
         with:
-          php-version: "8.2"
-          extensions: pdo, pdo_mysql
-          coverage: none
+          php-version: "8.2"                 # We testen op PHP 8.2 (app vereist >= 8.1).
+          extensions: pdo, pdo_mysql         # Nodig voor de databaseverbinding via PDO.
+          coverage: none                     # Geen code coverage -> sneller.
 
       - name: Composer-afhankelijkheden installeren
+        # Installeert o.a. PHPUnit. De vlaggen maken het stil en geschikt voor CI.
         run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Tests draaien (unit + integratie)
+        # Draait ALLE tests. De MySQL-service staat, dus ook de integratietests
+        # lopen mee. Faalt er één test, dan faalt de hele job (rood kruis).
         run: vendor/bin/phpunit --colors=never
